@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { login } from "../store/auth";
+import { useSelector } from "react-redux";
 import httpService from "../utils/httpService";
+import authService from "../api/authService";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+   const [error, setError] = useState("")
   const { email, password } = formData;
 
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -22,7 +22,17 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(login(email, password));
+    authService.login(email, password)
+    .then(
+      () => navigate("/"))
+    .catch(
+      (err) => {
+        if (err.response && err.response.data && err.response.data.detail) {
+          setError(err.response.data.detail);
+        } else {
+          setError("Unauthorized");
+        }
+      })
   };
 
   const handleContinueWithGoogle = async () => {
@@ -98,6 +108,12 @@ const LoginPage = () => {
                 required
               />
             </div>
+
+            {error && (
+              <div className="text-red-600 bg-red-100 p-2 rounded-md text-sm">
+                {error}
+              </div>
+            )}
 
             <button
               type="submit"

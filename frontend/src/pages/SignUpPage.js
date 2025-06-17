@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { signup } from "../store/auth";
+import { useSelector } from "react-redux";
 import httpService from "../utils/httpService";
+import authService from "../api/authService";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const [accountCreated, setAccountCreated] = useState(false);
   const [formData, setFormData] = useState({
@@ -25,9 +24,15 @@ const SignUpPage = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault();    
     if (password === re_password) {
-      dispatch(signup(first_name, last_name, email, password, re_password));
+      authService.register({first_name, last_name, email, password, re_password})
+      .then(() => {
+        navigate('/')
+      })
+      .catch((err) => {
+        console.log(err);
+      })
       setAccountCreated(true);
     }
   };
