@@ -63,7 +63,7 @@ const LoginPage = () => {
 
         {/* Login Card */}
         <div className="bg-white rounded-xl shadow-lg p-8">
-          {/* Logo/Branding */}
+          
           <div className="text-center mb-8">
             <img 
               src="/images/Stretching-exercises.gif" 

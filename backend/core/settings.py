@@ -92,8 +92,15 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+import dj_database_url
+
 DATABASES = {
-    "default": {
+    'default': dj_database_url.config(
+        default=f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}?sslmode={os.getenv('DB_SSL')}",
+        conn_max_age=600,
+        ssl_require=True
+    ),
+    "local": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": os.environ.get('DB_NAME'),
         "USER": os.environ.get('DB_USER'),

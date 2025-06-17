@@ -16,6 +16,7 @@ import Facebook from "./pages/Facebook";
 import Google from "./pages/Google";
 import ProfilePage from "./pages/ProfilePage";
 import EditProfilePage from './pages/EditProfilePage';
+import CreateSessionPage from "./pages/CreateSessionPage";
 
 const store = configureStore();
 
@@ -35,6 +36,7 @@ const App = () => {
             <Route path="/password/reset/confirm/:uid/:token" element={<ResetPasswordConfirmPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/edit" element={<EditProfilePage />} /> {/* Corrected line */}
+            <Route path="/create-session" element={<CreateSessionPage/>}/>
           </Routes>
         </Layout>
       </Router>
