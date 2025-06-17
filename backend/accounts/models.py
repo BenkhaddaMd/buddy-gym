@@ -21,7 +21,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False) # a retirer ; utilisation d'une table ROLES
 
     objects = UserAccountManager()
 
@@ -40,7 +40,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     
 class Session(models.Model):
     creator = models.ForeignKey(UserAccount, on_delete=models.CASCADE, related_name='created_sessions')
-    sport = models.CharField(max_length=100)
+    sport = models.CharField(max_length=100) # ajouter une table Sport
     location = models.CharField(max_length=255)
     date = models.DateField()
     time = models.TimeField()
@@ -54,7 +54,7 @@ class Session(models.Model):
 class Availability(models.Model):
     user = models.OneToOneField(UserAccount, on_delete=models.CASCADE, related_name='availability')
     is_available = models.BooleanField(default=False)
-    available_from = models.TimeField(null=True, blank=True)
+    available_from = models.TimeField(null=True, blank=True) # matin ou soir
     available_to = models.TimeField(null=True, blank=True)
 
     def __str__(self):
