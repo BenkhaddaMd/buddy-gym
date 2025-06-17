@@ -60,17 +60,20 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Logo/Branding */}
-        <div className="text-center mb-8">
-          <div className="mx-auto h-12 w-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl mb-2">
-            BG
-          </div>
-          <h1 className="text-3xl font-bold text-gray-800">BuddyGym</h1>
-          <p className="mt-2 text-gray-600">Train together, grow together</p>
-        </div>
 
         {/* Login Card */}
         <div className="bg-white rounded-xl shadow-lg p-8">
+          {/* Logo/Branding */}
+          <div className="text-center mb-8">
+            <img 
+              src="/images/Stretching-exercises.gif" 
+              alt="BuddyGym Logo" 
+              className="mx-auto h-24 w-auto mb-4" 
+            />
+            <h1 className="text-3xl font-bold text-gray-800">BuddyGym</h1>
+            <p className="mt-2 text-gray-600">Train together, grow together</p>
+          </div>
+
           <h2 className="text-2xl font-semibold text-gray-800 mb-6">Sign in to your account</h2>
           
           <form onSubmit={handleSubmit} className="space-y-5">

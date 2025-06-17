@@ -10,10 +10,6 @@ const HomePage = () => {
       <div className="w-full max-w-4xl">
         {/* Hero Section */}
         <div className="bg-white rounded-xl shadow-lg p-8 md:p-12 text-center">
-          {/* Logo/Branding */}
-          <div className="mx-auto h-16 w-16 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-2xl mb-4">
-            BG
-          </div>
           
           <h1 className="text-4xl font-bold text-gray-800 mb-4">Welcome to BuddyGym!</h1>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
@@ -58,17 +54,31 @@ const HomePage = () => {
         {/* Features Section */}
         <div className="mt-12 grid md:grid-cols-3 gap-6">
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <div className="text-blue-600 text-2xl mb-3">🏋️</div>
+            <img 
+              src="/images/Fitness-tracker.gif" 
+              alt="Fitness Tracker" 
+              className="mx-auto" 
+            />
             <h3 className="font-semibold text-lg mb-2">Track Workouts</h3>
             <p className="text-gray-600">Log and monitor your fitness progress with ease.</p>
           </div>
+
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <div className="text-blue-600 text-2xl mb-3">👥</div>
+            <img 
+              src="/images/Stability-ball.gif" 
+              alt="Find Buddies" 
+              className="mx-auto" 
+            />
             <h3 className="font-semibold text-lg mb-2">Find Buddies</h3>
             <p className="text-gray-600">Connect with workout partners in your area.</p>
           </div>
+
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <div className="text-blue-600 text-2xl mb-3">📊</div>
+            <img 
+              src="/images/progres-analytics.gif" 
+              alt="Progress Analytics" 
+              className="mx-auto" 
+            />
             <h3 className="font-semibold text-lg mb-2">Progress Analytics</h3>
             <p className="text-gray-600">Visualize your fitness journey with detailed stats.</p>
           </div>
