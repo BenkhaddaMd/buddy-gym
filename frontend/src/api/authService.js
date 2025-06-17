@@ -31,6 +31,15 @@ const authService = {
     }
   },
 
+  updateUserData: async () => {
+    try {
+      const response = await axiosInstance.put("/auth/users/me/");
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
   /**
    * Login user
    * @param {string} email 
