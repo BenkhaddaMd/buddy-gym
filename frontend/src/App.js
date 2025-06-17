@@ -15,6 +15,7 @@ import ResetPasswordConfirmPage from "./pages/ResetPasswordConfirmPage";
 import Facebook from "./pages/Facebook";
 import Google from "./pages/Google";
 import ProfilePage from "./pages/ProfilePage";
+import CreateSessionPage from "./pages/CreateSessionPage";
 
 const store = configureStore();
 
@@ -39,6 +40,7 @@ const App = () => {
               element={<ResetPasswordConfirmPage />}
             />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/create-session" element={<CreateSessionPage/>}/>
           </Routes>
         </Layout>
       </Router>
