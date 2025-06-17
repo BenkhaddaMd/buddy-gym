@@ -15,3 +15,7 @@
 # env
 /backend/.env
 /frontend/.env
+
+# Ignorer les fichiers compilés Python
+__pycache__/
+*.py[cod]
