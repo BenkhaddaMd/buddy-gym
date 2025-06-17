@@ -36,3 +36,40 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+    
+class Session(models.Model):
+    creator = models.ForeignKey(UserAccount, on_delete=models.CASCADE, related_name='created_sessions')
+    sport = models.CharField(max_length=100)
+    location = models.CharField(max_length=255)
+    date = models.DateField()
+    time = models.TimeField()
+    participants = models.ManyToManyField(UserAccount, related_name='joined_sessions', blank=True)
+    max_participants = models.IntegerField(default=10)
+
+    def __str__(self):
+        return f"{self.sport} on {self.date} at {self.time} - {self.location}"
+
+
+class Availability(models.Model):
+    user = models.OneToOneField(UserAccount, on_delete=models.CASCADE, related_name='availability')
+    is_available = models.BooleanField(default=False)
+    available_from = models.TimeField(null=True, blank=True)
+    available_to = models.TimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {'Available' if self.is_available else 'Unavailable'}"
+
+
+class SportPreference(models.Model):
+    user = models.OneToOneField(UserAccount, on_delete=models.CASCADE, related_name='sport_preference')
+    preferred_sports = models.JSONField(default=list)
+    level = models.CharField(max_length=50, choices=[
+        ('Beginner', 'Beginner'),
+        ('Intermediate', 'Intermediate'),
+        ('Advanced', 'Advanced'),
+    ])
+    preferred_time = models.TimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.level}"
