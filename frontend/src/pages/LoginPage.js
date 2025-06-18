@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import httpService from "../utils/httpService";
 import authService from "../api/authService";
+import { login } from "../store/auth";
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -22,17 +24,7 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    authService.login(email, password)
-    .then(
-      () => navigate("/"))
-    .catch(
-      (err) => {
-        if (err.response && err.response.data && err.response.data.detail) {
-          setError(err.response.data.detail);
-        } else {
-          setError("Unauthorized");
-        }
-      })
+    dispatch(login(email, password));
   };
 
   const handleContinueWithGoogle = async () => {

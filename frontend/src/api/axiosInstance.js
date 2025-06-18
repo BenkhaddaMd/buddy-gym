@@ -4,7 +4,7 @@ const axiosInstance = axios.create({
   baseURL: 'http://127.0.0.1:8000',
   timeout: 5000,
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   }
 });
 
@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(config => {
   const token = localStorage.getItem('access');
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `JWT ${token}`;
   }
   return config;
 }, error => Promise.reject(error));
