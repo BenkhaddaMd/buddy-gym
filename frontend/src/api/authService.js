@@ -31,9 +31,14 @@ const authService = {
     }
   },
 
-  updateUserData: async () => {
+  /**
+   * Update user data
+   * @returns {Promise<Object>}
+   */
+
+  updateUserData: async ({first_name, last_name}) => {
     try {
-      const response = await axiosInstance.put("/auth/users/me/");
+      const response = await axiosInstance.put("/account/user/update/", {first_name, last_name});
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;

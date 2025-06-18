@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loadUser } from '../store/auth'; 
 import { useNavigate } from 'react-router-dom';
 import authService from '../api/authService';
+import axiosInstance from '../api/axiosInstance';
 
 const EditProfilePage = () => {
   const dispatch = useDispatch();
@@ -28,14 +29,15 @@ const EditProfilePage = () => {
     const updatedData = {
       first_name: firstName,
       last_name: lastName,
-      email: email,
     };
 
     try {
-
+      console.log(axiosInstance.defaults.headers);
       authService.updateUserData(updatedData).then(() => {
         navigate('/profile');
-      });
+      }).catch((err) => {
+        console.log(err);
+      })
 
     } catch (error) {
       console.error('Erreur lors de la mise à jour:', error); 
