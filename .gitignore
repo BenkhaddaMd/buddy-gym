@@ -17,6 +17,7 @@
 /frontend/.env
 
 # Ignorer les fichiers compilés Python
-**/migrations/__pycache__/*
 **/__pycache__/*
-**.py[cod]
+*.py[cod]
+**/migrations/__pycache__/*
+
