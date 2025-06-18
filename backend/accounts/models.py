@@ -68,7 +68,7 @@ class Availability(models.Model):
 
 class SportPreference(models.Model):
     user = models.OneToOneField(UserAccount, on_delete=models.CASCADE, related_name='sport_preference')
-    preferred_sports = models.JSONField(default=list)
+    preferred_sports = models.ManyToManyField(Sport, blank=True)
     level = models.CharField(max_length=50, choices=[
         ('Beginner', 'Beginner'),
         ('Intermediate', 'Intermediate'),
