@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import JoinSessionView, MatchUsersView, SessionListCreateView, SportPreferenceView, UserAvailabilityView
+from .views import JoinSessionView, MatchUsersView, SessionListCreateView, SportPreferenceView, UserAvailabilityView, SportListView
 
 
 urlpatterns = [
@@ -8,4 +8,5 @@ urlpatterns = [
     path('availability/', UserAvailabilityView.as_view(), name='user-availability'),
     path('preference/', SportPreferenceView.as_view(), name='sport-preference'),
     path('matches/', MatchUsersView.as_view(), name='user-matches'),
+    path('sports/', SportListView.as_view(), name='sport-list'),
 ]

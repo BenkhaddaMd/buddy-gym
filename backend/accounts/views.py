@@ -3,9 +3,14 @@ from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from .models import Availability, Session, SportPreference
-from .serializers import AvailabilitySerializer, SessionSerializer, SportPreferenceSerializer
+from .models import Availability, Session, SportPreference, Sport
+from .serializers import AvailabilitySerializer, SessionSerializer, SportPreferenceSerializer, SportSerializer
+from django.db.models import Q
 
+
+class SportListView(generics.ListAPIView):
+    queryset = Sport.objects.all()
+    serializer_class = SportSerializer
 
 class SessionListCreateView(generics.ListCreateAPIView):
     queryset = Session.objects.all().order_by('date', 'time')
@@ -78,22 +83,24 @@ class MatchUsersView(APIView):
         except SportPreference.DoesNotExist:
             return Response({"detail": "Sport preferences not set."}, status=400)
 
-        # Get all other users with at least one matching sport and same level
-        matched_users = SportPreference.objects.filter(
-            ~Q(user=user),  # exclude self
-            level=user_pref.level,
-            preferred_sports__overlap=user_pref.preferred_sports  # for PostgreSQL JSONField
-        )
+        # Récupérer les sports de l'utilisateur connecté
+        user_sports = user_pref.preferred_sports.all()
 
-        # Optional: filter with availability matching (simple version)
+        # Filtrer les autres utilisateurs qui ont AU MOINS UN sport en commun et le même niveau
+        matched_users = SportPreference.objects.filter(
+            ~Q(user=user),
+            level=user_pref.level,
+            preferred_sports__in=user_sports
+        ).distinct()  # éviter les doublons si plusieurs sports correspondent
+
+        # Optionnel : filtrer sur la disponibilité
         try:
             user_availability = user.availability
             matched_users = matched_users.filter(
                 user__availability__is_available=True,
             )
         except Availability.DoesNotExist:
-            pass  # Skip availability filtering if user has none
+            pass
 
-        # Serialize
         serializer = SportPreferenceSerializer(matched_users, many=True)
         return Response(serializer.data)
