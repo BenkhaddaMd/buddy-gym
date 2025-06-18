@@ -37,10 +37,15 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
+class Sport(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
     
 class Session(models.Model):
     creator = models.ForeignKey(UserAccount, on_delete=models.CASCADE, related_name='created_sessions')
-    sport = models.CharField(max_length=100)
+    sport = models.ForeignKey(Sport, on_delete=models.CASCADE)
     location = models.CharField(max_length=255)
     date = models.DateField()
     time = models.TimeField()
