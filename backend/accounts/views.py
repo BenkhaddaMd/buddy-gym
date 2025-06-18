@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics
@@ -7,6 +8,22 @@ from .models import Availability, Session, SportPreference, Sport
 from .serializers import AvailabilitySerializer, SessionSerializer, SportPreferenceSerializer, SportSerializer
 from django.db.models import Q
 
+
+class UserUpdateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request):
+        print("🔐 Authenticated user:", request.user)
+        print("📦 Incoming data:", request.data)
+
+        serializer = UserSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            user = serializer.save()
+            print("✅ User updated:", user)
+            return Response(serializer.data)
+        
+        print("❌ Validation errors:", serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SportListView(generics.ListAPIView):
     queryset = Sport.objects.all()

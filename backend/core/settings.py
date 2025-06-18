@@ -14,6 +14,7 @@ from django.core.management.utils import get_random_secret_key
 from pathlib import Path
 from datetime import timedelta
 import os
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,7 +51,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'social_django.middleware.SocialAuthExceptionMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -59,6 +60,13 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'authorization',
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -169,7 +177,11 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+    'rest_framework.renderers.JSONRenderer',
+),
+
 }
 
 AUTHENTICATION_BACKENDS = (
@@ -207,10 +219,14 @@ DJOSER = {
     'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': ['http://localhost:8000/google', 'http://localhost:8000/facebook'],
     'SERIALIZERS': {
         'user_create': 'accounts.serializers.UserCreateSerializer',
-        'user': 'accounts.serializers.UserCreateSerializer',
-        'current_user': 'accounts.serializers.UserCreateSerializer',
+        'user': 'accounts.serializers.UserSerializer',
+        'current_user': 'accounts.serializers.UserSerializer',
         'user_delete': 'djoser.serializers.UserDeleteSerializer'
-    }
+    },
+    'PERMISSIONS': {
+        'user': ['rest_framework.permissions.IsAuthenticated'],
+        'user_delete': ['rest_framework.permissions.IsAuthenticated'],
+    },
 
 }
 
