@@ -21,7 +21,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False) # a retirer ; utilisation d'une table ROLES
 
     objects = UserAccountManager()
 
@@ -59,7 +59,7 @@ class Session(models.Model):
 class Availability(models.Model):
     user = models.OneToOneField(UserAccount, on_delete=models.CASCADE, related_name='availability')
     is_available = models.BooleanField(default=False)
-    available_from = models.TimeField(null=True, blank=True)
+    available_from = models.TimeField(null=True, blank=True) # matin ou soir
     available_to = models.TimeField(null=True, blank=True)
 
     def __str__(self):
