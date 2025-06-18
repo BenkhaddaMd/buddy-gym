@@ -2,7 +2,7 @@ from djoser.serializers import UserCreateSerializer
 from djoser.serializers import UserSerializer as BaseUserSerializer
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Availability, Session, SportPreference, Sport
+from .models import Availability, Participation, Session, SportPreference, Sport
 
 User = get_user_model()
 
@@ -42,3 +42,10 @@ class SportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sport
         fields = ['id', 'name']
+
+class ParticipationSerializer(serializers.ModelSerializer):
+    session = serializers.StringRelatedField()
+
+    class Meta:
+        model = Participation
+        fields = ['id', 'session', 'joined_at']
