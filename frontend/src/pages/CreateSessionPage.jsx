@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import sessionService from "../api/sessionApi";
 
 export default function CreateSessionPage() {
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ export default function CreateSessionPage() {
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [sports, setSports] = useState([]);
 
   const { sport, location, date, time, max_participants } = formData;
 
@@ -19,27 +21,27 @@ export default function CreateSessionPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const fetchSportsList = async () => {
+    try {
+      const response = await sessionService.getSportsList();
+      setSports(response);
+    } catch (error) {
+      console.error("Error fetching sports list:", error);
+      setError("Impossible de charger la liste des sports.");
+    }
+  }
+
+  useEffect(() => {
+    fetchSportsList();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
 
     try {
-      const token = localStorage.getItem("access");
-
-      const data = new FormData();
-      data.append("sport", sport);
-      data.append("location", location);
-      data.append("date", date);
-      data.append("time", time);
-      data.append("max_participants", max_participants);
-
-      await axios.post("/account/sessions/", data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await sessionService.createSession(formData);
 
       setSuccess("Session créée avec succès !");
       setFormData({
@@ -50,13 +52,9 @@ export default function CreateSessionPage() {
         max_participants: 10,
       });
     } catch (err) {
-      if (err.response && err.response.data && err.response.data.detail) {
-        setError(err.response.data.detail);
-      } else {
-        setError("Une erreur est survenue.");
-      }
+      setError(err.detail || "Une erreur est survenue.");
     }
-  };
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
@@ -74,15 +72,14 @@ export default function CreateSessionPage() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label className="block text-gray-700 font-medium mb-1">Sport</label>
-                <input
-                  type="text"
-                  name="sport"
-                  value={sport}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                  placeholder="Ex: Football, Muscu, Yoga..."
-                  required
-                />
+                <select name="sport" id="sport" value={sport} onChange={handleChange} className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" required>
+                  <option value="">Sélectionner un sport</option>
+                  {sports.map((sport) => (
+                    <option key={sport.id} value={sport.id}>
+                      {sport.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>
