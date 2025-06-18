@@ -42,10 +42,10 @@ const HomePage = () => {
           {isAuthenticated && (
             <div className="mt-8">
               <Link
-                to="/dashboard"
+                to="/create-session"
                 className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg shadow-md hover:shadow-lg transition duration-200"
               >
-                Go to Dashboard
+                Create a session
               </Link>
             </div>
           )}
