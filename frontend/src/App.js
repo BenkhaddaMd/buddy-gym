@@ -18,6 +18,7 @@ import ProfilePage from "./pages/ProfilePage";
 import EditProfilePage from './pages/EditProfilePage';
 import CreateSessionPage from "./pages/CreateSessionPage";
 import MatchingPage from "./pages/account/Matching";
+import SessionListPage from "./pages/SessionListPage";
 
 const store = configureStore();
 
@@ -36,9 +37,10 @@ const App = () => {
             <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/password/reset/confirm/:uid/:token" element={<ResetPasswordConfirmPage />} />
             <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/profile/edit" element={<EditProfilePage />} /> {/* Corrected line */}
+            <Route path="/profile/edit" element={<EditProfilePage />} />
             <Route path="/create-session" element={<CreateSessionPage/>}/>
             <Route path="matching" element={<MatchingPage/>}/>
+            <Route path="/sessions" element={<SessionListPage />} />
           </Routes>
         </Layout>
       </Router>

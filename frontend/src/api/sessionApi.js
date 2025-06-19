@@ -28,7 +28,19 @@ const sessionService = {
       throw error.response?.data || error.message;
     }
   },
+  
+  // Récupérer la liste des sessions
+  getSessionList: async () => {
+    const response = await axiosInstance.get("/account/sessions/");
+    return response.data;
+  },
 
+  // Participer à une session
+  participateInSession: async (sessionId) => {
+    const response = await axiosInstance.post(`/account/sessions/${sessionId}/join/`);
+    return response.data;
+  },
 };
+
 
 export default sessionService;

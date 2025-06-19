@@ -61,6 +61,7 @@ class Session(models.Model):
     date = models.DateField()
     time = models.TimeField()
     max_participants = models.IntegerField(default=10)
+    participants = models.ManyToManyField(UserAccount, through='Participation', related_name='sessions_participated')
 
     def __str__(self):
         return f"{self.sport} on {self.date} at {self.time} - {self.location}"
