@@ -123,7 +123,7 @@ class MatchUsersView(APIView):
         return Response(serializer.data)
     
 
-class ParticipateSessionView(APIView):
+class ParticipateToSessionView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, session_id):

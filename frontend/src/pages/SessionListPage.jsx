@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import  sessionService from "../api/sessionApi";
+import sessionService from "../api/sessionApi";
 import SessionCard from "../components/SessionCard";
+import SessionModal from "../components/SessionModal";
 
 const SessionListPage = () => {
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedSession, setSelectedSession] = useState(null); // pour le modal
 
   useEffect(() => {
     sessionService
@@ -33,11 +35,33 @@ const SessionListPage = () => {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {sessions.map((session) => (
-              <SessionCard key={session.id} session={session} />
+              <SessionCard
+                key={session.id}
+                session={session}
+                onClick={() => setSelectedSession(session)}
+              />
             ))}
           </div>
         )}
       </div>
+
+      {/* Modal */}
+      {selectedSession && (
+        <SessionModal
+          session={selectedSession}
+          onClose={() => setSelectedSession(null)}
+          onParticipate={async () => {
+            try {
+              await sessionService.participateInSession(selectedSession.id);
+              alert("Participation enregistrée !");
+              setSelectedSession(null);
+              window.location.reload(); // ou tu peux mettre à jour localement
+            } catch (err) {
+              alert(err.detail || "Erreur lors de la participation.");
+            }
+          }}
+        />
+      )}
     </div>
   );
 };
