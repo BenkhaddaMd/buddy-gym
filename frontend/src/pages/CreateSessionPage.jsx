@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import sessionService from "../api/sessionApi";
+import matchingApi from "../api/matchingApi";
 
 export default function CreateSessionPage() {
   const [formData, setFormData] = useState({
@@ -22,7 +22,7 @@ export default function CreateSessionPage() {
 
   const fetchSportsList = async () => {
     try {
-      const response = await sessionService.getSportsList();
+      const response = await matchingApi.getSportsList();
       setSports(response);
     } catch (error) {
       console.error("Error fetching sports list:", error);
@@ -37,10 +37,12 @@ export default function CreateSessionPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setSuccess("");
+    setSuccess("");    
 
     try {
-      await sessionService.createSession(formData);
+        console.log(formData);
+
+      await matchingApi.createSession(formData);
 
       setSuccess("Session créée avec succès !");
       setFormData({

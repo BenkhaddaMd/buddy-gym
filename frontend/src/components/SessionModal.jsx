@@ -1,11 +1,11 @@
 import React from "react";
-import sessionService from "../api/sessionApi";
+import matchingApi from "../api/matchingApi";
 
 const SessionModal = ({ session, onClose, onParticipate }) => {
 
     const handleParticipate = async () => {
         try {
-            await sessionService.participateInSession(session.id);
+            await matchingApi.participateInSession(session.id);
             alert("Participation enregistrée !");
             onClose();
         } catch (err) {

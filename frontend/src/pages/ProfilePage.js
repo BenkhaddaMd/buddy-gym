@@ -3,7 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loadUser } from '../store/auth';
 import { Link } from 'react-router-dom';
 import matchingApi from '../api/matchingApi';
-import sessionService from '../api/sessionApi';
+import accountApi from '../api/accountApi';
+import { toast } from 'react-toastify';
+
 
 const PERIOD_CHOICES = [
   { value: 'matin', label: 'Matin' },
@@ -25,13 +27,12 @@ const ProfilePage = () => {
   const [availabilities , setAvailabilities ] = useState([])
   const [newPeriod, setNewPeriod] = useState('');
   const [sportsList, setSportsList] = useState([]);
-  const [selectedSports, setSelectedSports] = useState(null)
+  const [selectedSports, setSelectedSports] = useState([])
   const [selectedLevel, setSelectedLevel] = useState(null)
   const [selectedTime, setSelectedTime] = useState(null)
 
-
   const fetchSportPreferences = () => {
-    matchingApi.getSportPreference().then((res) => {
+    accountApi.getSportPreference().then((res) => {
       setSelectedLevel(res.level)
       setSelectedSports(res.preferred_sports)
       setSelectedTime(res.preferred_time)
@@ -39,14 +40,14 @@ const ProfilePage = () => {
   }
 
   const fetchAvailabilities = () => {
-    matchingApi.getAvailabilities().then((res) => {
+    accountApi.getAvailabilities().then((res) => {
       setAvailabilities(res)
     })
   }
 
   const fetchSportsList = async () => {
     try {
-      const response = await sessionService.getSportsList();
+      const response = await matchingApi.getSportsList();
       setSportsList(response);
     } catch (error) {
       console.error("Error fetching sports list:", error);
@@ -54,19 +55,20 @@ const ProfilePage = () => {
   }
 
   const handleAddSport = () => {
-
     const data = {
       preferred_sports: selectedSports,
-      level: selectedLevel,         
-      preferred_time: selectedTime
+      level: selectedLevel,
+      preferred_time: selectedTime,
     };
-    
-    matchingApi.addSportToPreference(data);
+
+    accountApi.addSportToPreference(data)
+      .then(() => toast.success("Saved !"))
+      .catch(() => toast.error("Error !"));
   };
 
   const handleAdd = () => {
     if (!newPeriod) return; 
-    matchingApi.addAvailabilities({ period: newPeriod }).then(res => {
+    accountApi.addAvailabilities({ period: newPeriod }).then(res => {
       setAvailabilities(prev => [...prev, res]);
       setNewPeriod('');
     });
@@ -81,6 +83,12 @@ const ProfilePage = () => {
     fetchSportsList()
     fetchSportPreferences()
   }, [])
+
+  useEffect(() => {
+    if (selectedSports.length > 0 || selectedLevel || selectedTime) {
+      handleAddSport();
+    }
+  }, [selectedSports, selectedLevel, selectedTime]);
 
   const handleDelete = (id) => {
     console.log("Supprimer ID:", id);
@@ -187,27 +195,69 @@ const ProfilePage = () => {
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Preferred Sports</label>
-                  <select
-                    multiple
-                    value={selectedSports}
-                    onChange={(e) => {
-                      const values = Array.from(e.target.selectedOptions, opt => Number(opt.value));
-                      setSelectedSports(values);
-                    }}
-                    className="w-full border px-3 py-2 rounded text-gray-700"
-                  >
-                    {sportsList.map(sport => (
-                      <option key={sport.id} value={sport.id}>{sport.name}</option>
-                    ))}
-                  </select>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Preferred Sports</label>
+
+                  {/* Available sports */}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {sportsList.map((sport) => {
+                      const isSelected = selectedSports?.includes(sport.id);
+                      return (
+                        <button
+                          key={sport.id}
+                          type="button"
+                          onClick={() => {
+                            if (isSelected) {
+                              setSelectedSports(selectedSports.filter(id => id !== sport.id));
+                            } else {
+                              setSelectedSports([...(selectedSports || []), sport.id]);
+                            }
+                          }}
+                          className={`px-3 py-1 rounded-full text-sm font-medium border transition duration-200 ${
+                            isSelected
+                              ? 'bg-blue-600 text-white border-blue-600'
+                              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
+                          }`}
+                        >
+                          {sport.name}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Selected sports tags */}
+                  {selectedSports?.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {selectedSports.map((id) => {
+                        const sport = sportsList.find((s) => s.id === id);
+                        if (!sport) return null;
+                        return (
+                          <div
+                            key={id}
+                            className="flex items-center bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full"
+                          >
+                            {sport.name}
+                            <button
+                              onClick={() => {
+                                setSelectedSports(selectedSports.filter((sId) => sId !== id))
+                              }
+                              }
+                              className="ml-2 text-blue-500 hover:text-blue-700 focus:outline-none"
+                            >
+                              &times;
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
+
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Level</label>
                   <select
                     value={selectedLevel}
-                    onChange={(e) => setSelectedLevel(e.target.value)}
+                    onChange={(e) => {setSelectedLevel(e.target.value); }}
                     className="w-full border px-3 py-2 rounded text-gray-700"
                   >
                     {LEVEL_CHOICES.map(level => (
@@ -221,18 +271,12 @@ const ProfilePage = () => {
                   <input
                     type="time"
                     value={selectedTime}
-                    onChange={(e) => setSelectedTime(e.target.value + ":00")}
+                    onChange={(e) => {setSelectedTime(e.target.value);}}
                     className="w-full border px-3 py-2 rounded text-gray-700"
                   />
                 </div>
 
                 <div>
-                  <button
-                    onClick={handleAddSport}
-                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-                  >
-                    Save Preferences
-                  </button>
                 </div>
               </div>
             </div>
