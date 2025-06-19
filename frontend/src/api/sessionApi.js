@@ -29,7 +29,13 @@ const sessionService = {
       throw error.response?.data || error.message;
     }
   },
-
+  
+  // Récupérer la liste des sessions
+  getSessionList: async () => {
+    const response = await axiosInstance.get("/account/sessions/");
+    return response.data;
+  },
 };
+
 
 export default sessionService;
