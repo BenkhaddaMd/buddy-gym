@@ -1,6 +1,5 @@
 import axiosInstance from "./axiosInstance";
 
-// Auth API Service
 const sessionService = {
  
   getSportsList: async () => {

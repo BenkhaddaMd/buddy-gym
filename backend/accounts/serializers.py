@@ -22,12 +22,12 @@ class SessionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Session
-        fields = ['id', 'creator', 'sport', 'location', 'date', 'time', 'participants', 'max_participants']
+        fields = ['id', 'creator', 'sport', 'location', 'date', 'time', 'max_participants']
 
 class AvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Availability
-        fields = ['id', 'user', 'is_available', 'available_from', 'available_to']
+        fields = ['id', 'user', 'period']
         read_only_fields = ['user']
 
 
