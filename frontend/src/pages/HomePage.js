@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import SessionListPage from "./SessionListPage";
 
 const HomePage = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -51,8 +52,10 @@ const HomePage = () => {
           )}
         </div>
 
+        <SessionListPage></SessionListPage>
+
         {/* Features Section */}
-        <div className="mt-12 grid md:grid-cols-3 gap-6">
+        <div className="mt-2 grid md:grid-cols-3 gap-6">
           <div className="bg-white p-6 rounded-lg shadow-md">
             <img 
               src="/images/Fitness-tracker.gif" 

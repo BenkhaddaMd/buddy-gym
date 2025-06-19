@@ -17,8 +17,7 @@ class UserCreateSerializer(UserCreateSerializer):
         fields = ('id', 'email', 'first_name', 'last_name', 'password')
 
 class SessionSerializer(serializers.ModelSerializer):
-    creator = serializers.ReadOnlyField(source='creator.username')
-    participants = serializers.StringRelatedField(many=True, read_only=True)
+    creator = serializers.ReadOnlyField(source='creator.email')
 
     class Meta:
         model = Session
