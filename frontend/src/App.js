@@ -39,7 +39,7 @@ const App = () => {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/edit" element={<EditProfilePage />} />
             <Route path="/create-session" element={<CreateSessionPage/>}/>
-            <Route path="matching" element={<MatchingPage/>}/>
+            <Route path="/matching" element={<MatchingPage/>}/>
             <Route path="/sessions" element={<SessionListPage />} />
           </Routes>
         </Layout>
