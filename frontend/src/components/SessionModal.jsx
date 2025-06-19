@@ -35,6 +35,9 @@ const SessionModal = ({ session, onClose, onParticipate }) => {
         {/* Contenu */}
         <div className="p-5">
           <h2 className="text-2xl font-bold text-blue-700 mb-1">{session.sport}</h2>
+          <p className="text-sm text-gray-500 italic mb-2">
+            Créée par <strong>{session.creator}</strong>
+          </p>
           <p className="text-sm text-gray-600 mb-2">📍 {session.location}</p>
           <p className="text-sm text-gray-600 mb-2">📅 {session.date} — 🕒 {session.time}</p>
           <p className="text-sm text-gray-600 mb-2">

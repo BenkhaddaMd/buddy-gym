@@ -17,11 +17,15 @@ class UserCreateSerializer(UserCreateSerializer):
         fields = ('id', 'email', 'first_name', 'last_name', 'password')
 
 class SessionSerializer(serializers.ModelSerializer):
-    creator = serializers.ReadOnlyField(source='creator.email')
-
+    creator = serializers.SerializerMethodField()
+    sport = serializers.StringRelatedField()
+    
     class Meta:
         model = Session
         fields = ['id', 'creator', 'sport', 'location', 'date', 'time', 'max_participants']
+    
+    def get_creator(self, obj):
+        return f"{obj.creator.first_name} {obj.creator.last_name}"
 
 class AvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
