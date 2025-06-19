@@ -17,6 +17,7 @@ import Google from "./pages/Google";
 import ProfilePage from "./pages/ProfilePage";
 import EditProfilePage from './pages/EditProfilePage';
 import CreateSessionPage from "./pages/CreateSessionPage";
+import MatchingPage from "./pages/account/Matching";
 
 const store = configureStore();
 
@@ -37,6 +38,7 @@ const App = () => {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/edit" element={<EditProfilePage />} /> {/* Corrected line */}
             <Route path="/create-session" element={<CreateSessionPage/>}/>
+            <Route path="matching" element={<MatchingPage/>}/>
           </Routes>
         </Layout>
       </Router>

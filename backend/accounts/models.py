@@ -94,7 +94,7 @@ class SportPreference(models.Model):
     preferred_time = models.TimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.level}"
+        return f"{self.user.email} - {self.level}"
     
 
 class Participation(models.Model):

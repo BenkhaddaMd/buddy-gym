@@ -5,7 +5,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .models import Availability, Participation, Session, SportPreference, Sport
-from .serializers import AvailabilitySerializer, ParticipationSerializer, SessionSerializer, SportPreferenceSerializer, SportSerializer, UserSerializer
+from .serializers import AvailabilitySerializer, MatchedUserSerializer, ParticipationSerializer, SessionSerializer, SportPreferenceSerializer, SportSerializer, UserSerializer
 from django.db.models import Q
 
 
@@ -99,27 +99,21 @@ class MatchUsersView(APIView):
         except SportPreference.DoesNotExist:
             return Response({"detail": "Sport preferences not set."}, status=400)
 
-        # Récupérer les sports de l'utilisateur connecté
         user_sports = user_pref.preferred_sports.all()
+        user_periods = user.availabilities.values_list('period', flat=True)
 
-        # Filtrer les autres utilisateurs qui ont AU MOINS UN sport en commun et le même niveau
         matched_users = SportPreference.objects.filter(
             ~Q(user=user),
             level=user_pref.level,
             preferred_sports__in=user_sports
         ).distinct()
 
-        # Filtrer selon les disponibilités : ici on cherche les utilisateurs qui ont au moins une disponibilité 
-        # avec une période identique à une disponibilité de l'utilisateur courant
-
-        user_periods = user.availabilities.values_list('period', flat=True)
-
         if user_periods:
             matched_users = matched_users.filter(
                 user__availabilities__period__in=user_periods
             ).distinct()
 
-        serializer = SportPreferenceSerializer(matched_users, many=True)
+        serializer = MatchedUserSerializer(matched_users, many=True)
         return Response(serializer.data)
     
 
