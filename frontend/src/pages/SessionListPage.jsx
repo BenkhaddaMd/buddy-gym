@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import sessionService from "../api/sessionApi";
+import matchingApi from "../api/matchingApi";
 import SessionCard from "../components/SessionCard";
 import SessionModal from "../components/SessionModal";
 
@@ -9,7 +9,7 @@ const SessionListPage = () => {
   const [selectedSession, setSelectedSession] = useState(null); // pour le modal
 
   useEffect(() => {
-    sessionService
+    matchingApi
       .getSessionList()
       .then((data) => {
         setSessions(data);
@@ -52,10 +52,10 @@ const SessionListPage = () => {
           onClose={() => setSelectedSession(null)}
           onParticipate={async () => {
             try {
-              await sessionService.participateInSession(selectedSession.id);
+              await matchingApi.participateInSession(selectedSession.id);
               alert("Participation enregistrée !");
               setSelectedSession(null);
-              window.location.reload(); // ou tu peux mettre à jour localement
+              window.location.reload();
             } catch (err) {
               alert(err.detail || "Erreur lors de la participation.");
             }

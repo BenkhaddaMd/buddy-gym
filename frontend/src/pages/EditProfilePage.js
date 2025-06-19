@@ -32,7 +32,6 @@ const EditProfilePage = () => {
     };
 
     try {
-      console.log(axiosInstance.defaults.headers);
       authService.updateUserData(updatedData).then(() => {
         navigate('/profile');
       }).catch((err) => {

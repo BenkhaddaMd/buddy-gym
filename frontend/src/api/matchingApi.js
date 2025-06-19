@@ -2,20 +2,10 @@ import axiosInstance from "./axiosInstance";
 
 const matchingApi = {
 
-  
 
-  getAvailabilities: async () => {
+  getSportsList: async () => {
     try {
-      const response = await axiosInstance.get("/account/availability/");
-      return response.data;
-    } catch (error) {
-      throw error.response?.data || error.message;
-    }
-  },
-
-  addAvailabilities: async (data) => {
-    try {
-      const response = await axiosInstance.post("/account/availability/", data);
+      const response = await axiosInstance.get("/matching/sports/");
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -24,30 +14,38 @@ const matchingApi = {
  
   getMatching: async () => {
     try {
-      const response = await axiosInstance.get("/account/matches/");
+      const response = await axiosInstance.get("/matching/matches/");
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
     }
   },
 
-
-  getSportPreference: async () => {
+  createSession: async (sessionData) => {
     try {
-      const response = await axiosInstance.get("/account/preference/");
+      const formData = new FormData();
+      formData.append("sport", sessionData.sport);
+      formData.append("location", sessionData.location);
+      formData.append("date", sessionData.date);
+      formData.append("time", sessionData.time);
+      formData.append("max_participants", sessionData.max_participants);
+
+      const response = await axiosInstance.post("/matching/sessions/", formData);
+
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
     }
   },
+  
+  getSessionList: async () => {
+    const response = await axiosInstance.get("/matching/sessions/");
+    return response.data;
+  },
 
-  addSportToPreference: async (data) => {
-    try {
-      const response = await axiosInstance.put("/account/preference/", data);
-      return response.data;
-    } catch (error) {
-      throw error.response?.data || error.message;
-    }
+  participateInSession: async (sessionId) => {
+    const response = await axiosInstance.post(`/matching/sessions/${sessionId}/join/`);
+    return response.data;
   },
 };
 
