@@ -1,17 +1,17 @@
 import React from "react";
 
-const SessionCard = ({ session }) => {
-
+const SessionCard = ({ session, onClick }) => {
   return (
-    <div className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col">
-      {/* Image */}
+    <div
+      onClick={onClick}
+      className="cursor-pointer bg-white rounded-xl shadow-md overflow-hidden flex flex-col hover:shadow-lg transition"
+    >
       <img
         src="/images/Personal-Trainer-amico.png"
         alt="sport illustration"
         className="w-full h-40 object-cover"
       />
 
-      {/* Content */}
       <div className="p-4 flex flex-col gap-2">
         <div className="flex justify-between items-center">
           <h3 className="text-xl font-bold text-blue-700">{session.sport}</h3>
@@ -20,16 +20,11 @@ const SessionCard = ({ session }) => {
           </span>
         </div>
 
-        <p className="text-gray-600 text-sm">
-          📍 <span className="font-medium">{session.location}</span>
-        </p>
-
+        <p className="text-gray-600 text-sm">📍 {session.location}</p>
         <p className="text-sm text-gray-500">🕒 {session.time}</p>
-
         <p className="text-sm text-gray-500">
-          👥 0/{session.max_participants} participants
+          👥 {(session.participants?.length || 0)}/{session.max_participants}
         </p>
-
         <p className="text-sm italic text-gray-400">
           Créée par <strong>{session.creator}</strong>
         </p>
