@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import httpService from "../utils/httpService";
-import authService from "../api/authService";
 import { login } from "../store/auth";
 
 const LoginPage = () => {
