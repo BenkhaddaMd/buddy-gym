@@ -49,3 +49,20 @@ class ParticipationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Participation
         fields = ['id', 'session', 'joined_at']
+
+
+class MatchedUserSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+    preferred_sports = SportSerializer(many=True)
+
+    class Meta:
+        model = SportPreference
+        fields = ['user', 'level', 'preferred_sports']
+
+    def get_user(self, obj):
+        return {
+            "id": obj.user.id,
+            "first_name": obj.user.first_name,
+            "last_name": obj.user.last_name,
+            "email": obj.user.email
+        }
