@@ -30,6 +30,7 @@ const ProfilePage = () => {
   const [selectedSports, setSelectedSports] = useState([])
   const [selectedLevel, setSelectedLevel] = useState(null)
   const [selectedTime, setSelectedTime] = useState(null)
+  const [Ischanging, setIsChanging] = useState(false)
 
   const fetchSportPreferences = () => {
     accountApi.getSportPreference().then((res) => {
@@ -85,10 +86,10 @@ const ProfilePage = () => {
   }, [])
 
   useEffect(() => {
-    if (selectedSports.length > 0 || selectedLevel || selectedTime) {
+    if(Ischanging)
       handleAddSport();
-    }
-  }, [selectedSports, selectedLevel, selectedTime]);
+    setIsChanging(false)
+  }, [Ischanging]);
 
   const handleDelete = (id) => {
     console.log("Supprimer ID:", id);
@@ -211,6 +212,7 @@ const ProfilePage = () => {
                             } else {
                               setSelectedSports([...(selectedSports || []), sport.id]);
                             }
+                            setIsChanging(true)
                           }}
                           className={`px-3 py-1 rounded-full text-sm font-medium border transition duration-200 ${
                             isSelected
@@ -239,6 +241,7 @@ const ProfilePage = () => {
                             <button
                               onClick={() => {
                                 setSelectedSports(selectedSports.filter((sId) => sId !== id))
+                                setIsChanging(true)
                               }
                               }
                               className="ml-2 text-blue-500 hover:text-blue-700 focus:outline-none"
@@ -257,7 +260,7 @@ const ProfilePage = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Level</label>
                   <select
                     value={selectedLevel}
-                    onChange={(e) => {setSelectedLevel(e.target.value); }}
+                    onChange={(e) => {setSelectedLevel(e.target.value); setIsChanging(true)}}
                     className="w-full border px-3 py-2 rounded text-gray-700"
                   >
                     {LEVEL_CHOICES.map(level => (
@@ -271,7 +274,7 @@ const ProfilePage = () => {
                   <input
                     type="time"
                     value={selectedTime}
-                    onChange={(e) => {setSelectedTime(e.target.value);}}
+                    onChange={(e) => {setSelectedTime(e.target.value); setIsChanging(true)}}
                     className="w-full border px-3 py-2 rounded text-gray-700"
                   />
                 </div>
