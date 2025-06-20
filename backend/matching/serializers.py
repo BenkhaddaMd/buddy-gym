@@ -1,15 +1,19 @@
 from rest_framework import serializers
 from accounts.models import SportPreference
-from accounts.serializers import SportSerializer
+from accounts.serializers import SportSerializer, UserSerializer
 from .models import Participation, Session
 
 class SessionSerializer(serializers.ModelSerializer):
-    creator = serializers.ReadOnlyField(source='creator.email')
+    creator = serializers.SerializerMethodField()
     sport = serializers.CharField(source='sport.name', read_only=True)
+    participants = UserSerializer(many=True, read_only=True)
 
     class Meta:
         model = Session
-        fields = ['id', 'creator', 'sport', 'location', 'date', 'time', 'max_participants']
+        fields = ['id', 'creator', 'sport', 'location', 'date', 'time', 'max_participants', 'participants']
+    
+    def get_creator(self, obj):
+        return f"{obj.creator.first_name} {obj.creator.last_name}"
 
 class SessionCreateSerializer(serializers.ModelSerializer):
     creator = serializers.ReadOnlyField(source='creator.email')
