@@ -48,7 +48,9 @@ const SessionModal = ({ session, onClose, onParticipate }) => {
             <p className="mb-1 font-semibold">Participants :</p>
             <ul className="list-disc list-inside">
               {session.participants?.length > 0 ? (
-                session.participants.map((p, i) => <li key={i}>{p}</li>)
+                session.participants.map((p, i) => (
+                  <li key={i}>{p.first_name} {p.last_name}</li>
+                ))
               ) : (
                 <li>Aucun participant</li>
               )}
